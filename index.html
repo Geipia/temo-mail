@@ -5,149 +5,193 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TempMail — Confidentialité Totale</title>
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #12121a;
-    --surface2: #1a1a26;
-    --border: #2a2a40;
-    --accent: #6c63ff;
-    --accent2: #8b5cf6;
-    --fire1: #ff4500;
-    --green: #00d68f;
-    --red: #ff4757;
-    --text: #e8e8f0;
-    --muted: #7070a0;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --border: #2a2a40;
+  --accent: #6c63ff;
+  --accent2: #8b5cf6;
+  --green: #00d68f;
+  --red: #ff4757;
+  --text: #e8e8f0;
+  --muted: #7070a0;
+  --r: 12px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-  /* POPUP */
-  #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(6px); animation: fadeIn .3s ease; }
-  #popup { background: linear-gradient(135deg, #12121a, #1a1a2e); border: 1px solid var(--accent); border-radius: 20px; padding: 40px; max-width: 480px; width: 90%; text-align: center; box-shadow: 0 0 60px rgba(108,99,255,0.3); animation: slideUp .4s cubic-bezier(.34,1.56,.64,1); }
-  #popup .shield { font-size: 64px; margin-bottom: 16px; display: block; }
-  #popup h2 { font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
-  #popup p { color: var(--muted); line-height: 1.6; margin-bottom: 8px; font-size: 15px; }
-  #popup .highlight { color: var(--green); font-weight: 600; }
-  #popup .badges { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
-  #popup .badge { background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--accent2); }
-  #popup-close { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 10px; padding: 14px 40px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: transform .2s, box-shadow .2s; }
-  #popup-close:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,0.4); }
+/* ── POPUP ─────────────────────────────────────────────── */
+#popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); padding: 16px; }
+#popup { background: linear-gradient(135deg,#12121a,#1a1a2e); border: 1px solid var(--accent); border-radius: 20px; padding: clamp(24px,5vw,40px); max-width: 480px; width: 100%; text-align: center; box-shadow: 0 0 60px rgba(108,99,255,.3); animation: slideUp .4s cubic-bezier(.34,1.56,.64,1); }
+#popup .shield { font-size: clamp(48px,10vw,64px); margin-bottom: 14px; display: block; }
+#popup h2 { font-size: clamp(18px,4vw,24px); font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+#popup p { color: var(--muted); line-height: 1.6; margin-bottom: 8px; font-size: clamp(13px,3vw,15px); }
+#popup .hl { color: var(--green); font-weight: 600; }
+#popup .badges { display: flex; gap: 8px; justify-content: center; margin: 18px 0; flex-wrap: wrap; }
+#popup .badge { background: rgba(108,99,255,.15); border: 1px solid rgba(108,99,255,.3); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--accent2); }
+#popup-close { background: linear-gradient(135deg,var(--accent),var(--accent2)); color: #fff; border: none; border-radius: 10px; padding: 13px 36px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: transform .2s,box-shadow .2s; width: 100%; max-width: 280px; }
+#popup-close:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,.4); }
 
-  /* HEADER */
-  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon { font-size: 28px; }
-  .logo-text { font-size: 20px; font-weight: 700; color: var(--accent); }
-  .logo-sub { font-size: 11px; color: var(--muted); margin-top: -2px; }
-  .privacy-badge { background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.3); border-radius: 20px; padding: 6px 16px; font-size: 13px; color: var(--green); display: flex; align-items: center; gap: 6px; }
+/* ── HEADER ────────────────────────────────────────────── */
+header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px clamp(14px,4vw,24px); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; gap: 10px; }
+.logo { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.logo-icon { font-size: 24px; flex-shrink: 0; }
+.logo-text { font-size: clamp(16px,3vw,20px); font-weight: 700; color: var(--accent); white-space: nowrap; }
+.logo-sub { font-size: 10px; color: var(--muted); margin-top: -2px; white-space: nowrap; }
+.privacy-badge { background: rgba(0,214,143,.1); border: 1px solid rgba(0,214,143,.3); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; }
+.privacy-badge .pb-label { display: none; }
+@media(min-width:480px){ .privacy-badge .pb-label { display: inline; } }
 
-  /* MAIN */
-  .container { max-width: 900px; margin: 0 auto; padding: 32px 16px; }
+/* ── LAYOUT ────────────────────────────────────────────── */
+.container { max-width: 900px; margin: 0 auto; padding: clamp(16px,4vw,32px) clamp(12px,4vw,16px); }
 
-  /* STATUS */
-  #status-bar { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-  #status-bar.loading { color: var(--accent); }
-  #status-bar.ok { color: var(--green); }
-  #status-bar.error { color: var(--red); }
-  .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* ── STATUS BAR ────────────────────────────────────────── */
+#status-bar { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+#status-bar.loading { color: var(--accent); }
+#status-bar.ok { color: var(--green); }
+#status-bar.error { color: var(--red); }
+.spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
 
-  /* EMAIL BOX */
-  .email-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
-  .email-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2), #ff6a00); }
-  .email-box-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-  .email-address-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .email-address { font-size: 20px; font-weight: 700; color: var(--text); flex: 1; word-break: break-all; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; cursor: pointer; transition: border-color .2s; }
-  .email-address:hover { border-color: var(--accent); }
-  .email-address .copy-hint { font-size: 11px; color: var(--muted); font-weight: 400; display: block; margin-top: 2px; }
-  .btn { border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-  .btn:disabled { opacity: .5; cursor: not-allowed; }
-  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
-  .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
-  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-  .btn-outline:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .expire-info { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
-  .expire-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+/* ── EMAIL BOX ─────────────────────────────────────────── */
+.email-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: clamp(18px,4vw,28px); margin-bottom: 16px; position: relative; overflow: hidden; }
+.email-box::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),var(--accent2),#ff6a00); }
+.email-box-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.email-address-row { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+.email-address { font-size: clamp(13px,2.5vw,18px); font-weight: 700; color: var(--text); flex: 1 1 200px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; cursor: pointer; transition: border-color .2s; min-width: 0; word-break: break-all; }
+.email-address:hover { border-color: var(--accent); }
+.email-address .copy-hint { font-size: 10px; color: var(--muted); font-weight: 400; display: block; margin-top: 2px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { border: none; border-radius: 8px; padding: 11px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn-primary { background: linear-gradient(135deg,var(--accent),var(--accent2)); color: #fff; }
+.btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,99,255,.4); }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.expire-info { margin-top: 12px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.expire-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
 
-  /* PRIVACY STRIP */
-  .privacy-strip { background: linear-gradient(135deg, rgba(0,214,143,0.08), rgba(108,99,255,0.08)); border: 1px solid rgba(0,214,143,0.2); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 24px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-  .privacy-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
-  .privacy-item span:first-child { font-size: 18px; }
-  .privacy-item strong { color: var(--green); }
+/* ── PRIVACY STRIP ─────────────────────────────────────── */
+.privacy-strip { background: linear-gradient(135deg,rgba(0,214,143,.07),rgba(108,99,255,.07)); border: 1px solid rgba(0,214,143,.18); border-radius: var(--r); padding: 14px 16px; margin-bottom: 16px; display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 10px; }
+.privacy-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+.privacy-item .pi { font-size: 16px; }
+.privacy-item strong { color: var(--green); }
 
-  /* TOOLBAR */
-  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
-  .toolbar-left { display: flex; align-items: center; gap: 10px; }
-  .inbox-title { font-size: 18px; font-weight: 700; }
-  .inbox-count { background: var(--accent); color: #fff; border-radius: 20px; padding: 2px 10px; font-size: 12px; font-weight: 700; }
-  .toolbar-right { display: flex; gap: 10px; }
+/* ── TOOLBAR ───────────────────────────────────────────── */
+.toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+.toolbar-left { display: flex; align-items: center; gap: 8px; }
+.inbox-title { font-size: clamp(15px,3vw,18px); font-weight: 700; }
+.inbox-count { background: var(--accent); color: #fff; border-radius: 20px; padding: 2px 9px; font-size: 12px; font-weight: 700; }
+.toolbar-right { display: flex; gap: 8px; flex-wrap: wrap; }
+#fire-btn { background: linear-gradient(135deg,#ff4500,#ff6a00); color: #fff; border: none; border-radius: 8px; padding: 11px 16px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all .2s; }
+#fire-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255,69,0,.5); }
+#btn-refresh { padding: 11px 14px; font-size: 13px; }
 
-  /* FIRE BTN */
-  #fire-btn { background: linear-gradient(135deg, #ff4500, #ff6a00); color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all .2s; }
-  #fire-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255,69,0,0.5); }
+/* ── INBOX ─────────────────────────────────────────────── */
+.inbox { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; min-height: 260px; }
+.inbox-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: clamp(40px,10vw,80px) 20px; text-align: center; color: var(--muted); }
+.inbox-empty .icon { font-size: clamp(40px,10vw,64px); margin-bottom: 14px; opacity: .4; }
+.inbox-empty p { font-size: 14px; }
+.inbox-empty small { font-size: 12px; margin-top: 5px; display: block; }
+.mail-item { display: flex; align-items: flex-start; gap: 12px; padding: clamp(12px,3vw,18px) clamp(12px,3vw,20px); border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; animation: slideIn .3s ease; }
+.mail-item:last-child { border-bottom: none; }
+.mail-item:hover { background: var(--surface2); }
+.mail-item.unread { background: rgba(108,99,255,.05); }
+.mail-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,var(--accent),var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.mail-body { flex: 1; min-width: 0; }
+.mail-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; gap: 8px; }
+.mail-from { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mail-time { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+.mail-subject { font-size: 13px; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mail-preview { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; }
 
-  /* INBOX */
-  .inbox { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; min-height: 300px; }
-  .inbox-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; text-align: center; color: var(--muted); }
-  .inbox-empty .icon { font-size: 64px; margin-bottom: 16px; opacity: .4; }
-  .mail-item { display: flex; align-items: flex-start; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .2s; animation: slideIn .3s ease; }
-  .mail-item:last-child { border-bottom: none; }
-  .mail-item:hover { background: var(--surface2); }
-  .mail-item.unread { background: rgba(108,99,255,0.05); }
-  .mail-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0; }
-  .mail-body { flex: 1; min-width: 0; }
-  .mail-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-  .mail-from { font-weight: 600; font-size: 14px; }
-  .mail-time { font-size: 12px; color: var(--muted); }
-  .mail-subject { font-size: 14px; color: var(--text); margin-bottom: 4px; }
-  .mail-preview { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex-shrink: 0; }
+/* ── MODAL ─────────────────────────────────────────────── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); animation: fadeIn .2s ease; padding: 16px; }
+.modal-overlay.hidden { display: none; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 560px; animation: slideUp .3s cubic-bezier(.34,1.56,.64,1); overflow: hidden; max-height: 90vh; display: flex; flex-direction: column; }
+.modal-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.modal-header h3 { font-size: clamp(15px,3vw,18px); font-weight: 700; }
+.modal-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 0 4px; transition: color .2s; line-height: 1; }
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 12px; color: var(--muted); }
+.form-group input, .form-group textarea { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; color: var(--text); font-size: 14px; transition: border-color .2s; outline: none; font-family: inherit; resize: none; width: 100%; }
+.form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+.form-group textarea { height: 120px; }
+.modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+.mail-view-subject { font-size: clamp(16px,3vw,20px); font-weight: 700; margin-bottom: 10px; }
+.mail-view-meta { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.mail-view-meta span strong { color: var(--text); }
+.mail-view-body { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre-wrap; max-height: 320px; overflow-y: auto; word-break: break-word; }
 
-  /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); animation: fadeIn .2s ease; }
-  .modal-overlay.hidden { display: none; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 90%; max-width: 580px; animation: slideUp .3s cubic-bezier(.34,1.56,.64,1); overflow: hidden; }
-  .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-  .modal-header h3 { font-size: 18px; font-weight: 700; }
-  .modal-close { background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; padding: 0 4px; transition: color .2s; }
-  .modal-close:hover { color: var(--text); }
-  .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group label { font-size: 13px; color: var(--muted); }
-  .form-group input, .form-group textarea, .form-group select { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 14px; transition: border-color .2s; outline: none; font-family: inherit; resize: none; }
-  .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
-  .form-group textarea { height: 140px; }
-  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+/* ── FIRE OVERLAY ──────────────────────────────────────── */
+#fire-overlay { position: fixed; inset: 0; z-index: 2000; display: none; pointer-events: none; }
+#fire-canvas { width: 100%; height: 100%; display: block; }
+#fire-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; color: #fff; text-shadow: 0 0 20px #ff4500; animation: fireText 2.5s ease forwards; pointer-events: none; padding: 16px; }
+#fire-text h2 { font-size: clamp(32px,8vw,52px); font-weight: 900; }
+#fire-text p { font-size: clamp(14px,3vw,18px); margin-top: 8px; opacity: .9; }
 
-  /* MAIL VIEW */
-  .mail-view-subject { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
-  .mail-view-meta { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-  .mail-view-meta span strong { color: var(--text); }
-  .mail-view-body { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; font-size: 14px; line-height: 1.7; color: var(--text); white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+/* ── EASTER EGG ────────────────────────────────────────── */
+#egg-overlay { position: fixed; inset: 0; z-index: 3000; display: none; overflow: hidden; }
+#egg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#egg-content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  pointer-events: none; padding: 20px; text-align: center;
+}
+.egg-crown { font-size: clamp(48px,15vw,90px); animation: crownBounce 1s cubic-bezier(.34,1.56,.64,1) forwards; opacity: 0; }
+.egg-title {
+  font-size: clamp(28px,7vw,56px); font-weight: 900; margin: 10px 0 6px;
+  background: linear-gradient(90deg,#ffd700,#ff6a00,#ff00cc,#6c63ff,#00d68f,#ffd700);
+  background-size: 300%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: shimmer 2s linear infinite, textIn 1s .3s cubic-bezier(.34,1.56,.64,1) forwards;
+  opacity: 0;
+}
+.egg-sub {
+  font-size: clamp(14px,3vw,22px); color: rgba(255,255,255,.85);
+  font-weight: 300; letter-spacing: 2px;
+  animation: textIn 1s .6s ease forwards; opacity: 0;
+}
+.egg-from {
+  margin-top: 14px; font-size: clamp(12px,2.5vw,16px); color: rgba(255,255,255,.5);
+  animation: textIn 1s .9s ease forwards; opacity: 0;
+}
+.egg-close-btn {
+  margin-top: 28px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+  color: #fff; border-radius: 50px; padding: 12px 32px; font-size: 14px; font-weight: 600;
+  cursor: pointer; pointer-events: all; backdrop-filter: blur(4px);
+  animation: textIn 1s 1.2s ease forwards; opacity: 0;
+  transition: background .2s;
+}
+.egg-close-btn:hover { background: rgba(255,255,255,.25); }
+.egg-rings { position: absolute; inset: 0; pointer-events: none; }
+.ring {
+  position: absolute; top: 50%; left: 50%; border-radius: 50%;
+  border: 2px solid rgba(255,215,0,.4);
+  transform: translate(-50%,-50%) scale(0);
+  animation: ringExpand 2s ease-out forwards;
+}
 
-  /* FIRE OVERLAY */
-  #fire-overlay { position: fixed; inset: 0; z-index: 2000; display: none; pointer-events: none; }
-  #fire-canvas { width: 100%; height: 100%; display: block; }
-  #fire-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #fff; text-shadow: 0 0 20px var(--fire1); animation: fireText 2.5s ease forwards; pointer-events: none; }
-  #fire-text h2 { font-size: 48px; font-weight: 900; }
-  #fire-text p { font-size: 18px; margin-top: 8px; opacity: .9; }
+/* ── TOAST ─────────────────────────────────────────────── */
+#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 11px 22px; font-size: 13px; color: var(--green); opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 900; white-space: nowrap; max-width: 90vw; text-overflow: ellipsis; overflow: hidden; }
+#toast.show { opacity: 1; }
 
-  /* TOAST */
-  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 24px; font-size: 14px; color: var(--green); opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 900; white-space: nowrap; }
-  #toast.show { opacity: 1; }
-
-  /* ANIMATIONS */
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-  @keyframes fireText { 0% { opacity: 0; transform: translate(-50%,-40%); } 20% { opacity: 1; transform: translate(-50%,-50%); } 80% { opacity: 1; transform: translate(-50%,-50%); } 100% { opacity: 0; transform: translate(-50%,-60%); } }
-
-  @media (max-width: 600px) {
-    .email-address { font-size: 15px; }
-    #popup h2 { font-size: 20px; }
-  }
+/* ── KEYFRAMES ─────────────────────────────────────────── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+@keyframes fireText { 0% { opacity:0; transform:translate(-50%,-40%); } 20% { opacity:1; transform:translate(-50%,-50%); } 80% { opacity:1; transform:translate(-50%,-50%); } 100% { opacity:0; transform:translate(-50%,-60%); } }
+@keyframes crownBounce { 0% { opacity:0; transform:scale(0) rotate(-20deg); } 70% { opacity:1; transform:scale(1.2) rotate(5deg); } 100% { opacity:1; transform:scale(1) rotate(0); } }
+@keyframes textIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes shimmer { 0% { background-position:0% 50%; } 100% { background-position:300% 50%; } }
+@keyframes ringExpand { 0% { transform:translate(-50%,-50%) scale(0); opacity:1; } 100% { transform:translate(-50%,-50%) scale(4); opacity:0; } }
+@keyframes starFloat { 0% { transform:translateY(0) rotate(0); opacity:1; } 100% { transform:translateY(-100vh) rotate(720deg); opacity:0; } }
 </style>
 </head>
 <body>
@@ -157,7 +201,7 @@
   <div id="popup">
     <span class="shield">🛡️</span>
     <h2>TempMail — Confidentialité Totale</h2>
-    <p>Bienvenue sur le service de mail temporaire qui offre la <span class="highlight">meilleure confidentialité</span> et protection de la vie privée.</p>
+    <p>Bienvenue sur le service de mail temporaire qui offre la <span class="hl">meilleure confidentialité</span> et protection de la vie privée.</p>
     <p>Aucun compte requis. Aucune donnée stockée. Zéro traçage.</p>
     <div class="badges">
       <span class="badge">🔒 Chiffré</span>
@@ -178,9 +222,10 @@
       <div class="logo-sub">Protection de la vie privée</div>
     </div>
   </div>
-  <div class="privacy-badge">🔒 Connexion chiffrée</div>
+  <div class="privacy-badge">🔒 <span class="pb-label">Connexion chiffrée</span></div>
 </header>
 
+<!-- MAIN -->
 <div class="container">
 
   <div id="status-bar" class="loading">
@@ -193,23 +238,27 @@
     <div class="email-address-row">
       <div class="email-address" id="email-display" onclick="copyEmail()">
         <span id="email-text">chargement…</span>
-        <span class="copy-hint">Cliquer pour copier</span>
+        <span class="copy-hint">Appuyer pour copier</span>
       </div>
-      <button class="btn btn-primary" id="btn-new" onclick="newAccount()" disabled>🔄 Nouvelle</button>
-      <button class="btn btn-outline" id="btn-compose" onclick="openCompose()" disabled>✉️ Envoyer</button>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-new" onclick="newAccount()" disabled>🔄 Nouvelle</button>
+        <button class="btn btn-outline" id="btn-compose" onclick="openCompose()" disabled>✉️ Envoyer</button>
+      </div>
     </div>
     <div class="expire-info">
       <div class="expire-dot"></div>
-      Session active — <strong id="timer" style="color:var(--green);margin:0 4px;">60:00</strong> — Aucune donnée conservée
+      Session active —
+      <strong id="timer" style="color:var(--green)">60:00</strong>
+      — Aucune donnée conservée
     </div>
   </div>
 
   <div class="privacy-strip">
-    <div class="privacy-item"><span>🔒</span><span>Messages <strong>chiffrés</strong></span></div>
-    <div class="privacy-item"><span>👁️‍🗨️</span><span><strong>Aucun</strong> traçage IP</span></div>
-    <div class="privacy-item"><span>🚫</span><span><strong>Zéro</strong> publicité</span></div>
-    <div class="privacy-item"><span>🗑️</span><span>Auto-suppression <strong>garantie</strong></span></div>
-    <div class="privacy-item"><span>⚡</span><span>Emails <strong>réels</strong> en temps réel</span></div>
+    <div class="privacy-item"><span class="pi">🔒</span><span>Messages <strong>chiffrés</strong></span></div>
+    <div class="privacy-item"><span class="pi">👁️‍🗨️</span><span><strong>Aucun</strong> traçage IP</span></div>
+    <div class="privacy-item"><span class="pi">🚫</span><span><strong>Zéro</strong> publicité</span></div>
+    <div class="privacy-item"><span class="pi">🗑️</span><span>Auto-suppression <strong>garantie</strong></span></div>
+    <div class="privacy-item"><span class="pi">⚡</span><span>Emails <strong>réels</strong> en temps réel</span></div>
   </div>
 
   <div class="toolbar">
@@ -218,7 +267,7 @@
       <span class="inbox-count" id="mail-count">0</span>
     </div>
     <div class="toolbar-right">
-      <button class="btn btn-outline" id="btn-refresh" onclick="fetchMessages()" disabled title="Rafraîchir">🔄 Rafraîchir</button>
+      <button class="btn btn-outline" id="btn-refresh" onclick="fetchMessages()" disabled>🔄 Rafraîchir</button>
       <button id="fire-btn" onclick="triggerFire()">🔥 Tout supprimer</button>
     </div>
   </div>
@@ -258,7 +307,7 @@
         <label>Message</label>
         <textarea id="compose-body" placeholder="Votre message…"></textarea>
       </div>
-      <p style="font-size:12px;color:var(--muted)">⚠️ L'envoi d'emails sortants nécessite un relai SMTP. Cet adresse est optimisée pour la <strong>réception</strong>.</p>
+      <p style="font-size:12px;color:var(--muted)">⚠️ Adresse optimisée pour la <strong>réception</strong> d'emails.</p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeCompose()">Annuler</button>
@@ -269,7 +318,7 @@
 
 <!-- MAIL VIEW -->
 <div class="modal-overlay hidden" id="mail-view-modal">
-  <div class="modal" style="max-width:680px">
+  <div class="modal" style="max-width:660px">
     <div class="modal-header">
       <h3>📧 Message</h3>
       <button class="modal-close" onclick="closeMail()">✕</button>
@@ -299,146 +348,116 @@
   </div>
 </div>
 
+<!-- EASTER EGG OVERLAY -->
+<div id="egg-overlay">
+  <canvas id="egg-canvas"></canvas>
+  <div class="egg-rings" id="egg-rings"></div>
+  <div id="egg-content">
+    <div class="egg-crown">👑</div>
+    <div class="egg-title">ALOIS PELTIER</div>
+    <div class="egg-sub">V I P  D E T E C T E D</div>
+    <div class="egg-from">alois@peltier.com</div>
+    <button class="egg-close-btn" onclick="closeEasterEgg()">✨ Continuer</button>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
-// ── MAIL.TM API ──────────────────────────────────────────────────────────────
+// ── MAIL.TM ──────────────────────────────────────────────────────────────────
 const API = 'https://api.mail.tm';
-let token = null;
-let accountEmail = '';
-let accountId = '';
-let messages = [];
-let pollInterval = null;
-let timerSeconds = 3600;
-let currentViewMsg = null;
-let knownIds = new Set();
+let token = null, accountEmail = '', messages = [], pollInterval = null;
+let timerSec = 3600, currentViewMsg = null, knownIds = new Set();
+const EASTER_FROM = 'alois@peltier.com';
 
-async function apiGet(path, auth = false) {
-  const h = { 'Content-Type': 'application/json' };
+async function get(path, auth) {
+  const h = {'Content-Type':'application/json'};
   if (auth) h['Authorization'] = 'Bearer ' + token;
-  const r = await fetch(API + path, { headers: h });
+  const r = await fetch(API + path, {headers: h});
   if (!r.ok) throw new Error(r.status);
   return r.json();
 }
-
-async function apiPost(path, body) {
-  const r = await fetch(API + path, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+async function post(path, body) {
+  const r = await fetch(API + path, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
-
-async function apiDelete(path) {
-  await fetch(API + path, {
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + token }
-  });
+async function del(path) {
+  await fetch(API + path, {method:'DELETE', headers:{'Authorization':'Bearer '+token}});
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
-async function init() {
-  setStatus('loading', 'Connexion à mail.tm…');
-  try {
-    await newAccount();
-    startTimer();
-  } catch(e) {
-    setStatus('error', 'Erreur de connexion — réessayez');
-    document.getElementById('inbox-empty-text').textContent = 'Impossible de se connecter à mail.tm';
-  }
+function rand(n) {
+  return Array.from({length:n}, () => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random()*36)]).join('');
 }
 
-function randStr(n) {
-  const c = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  return Array.from({length: n}, () => c[Math.floor(Math.random()*c.length)]).join('');
-}
-
+// ── ACCOUNT ──────────────────────────────────────────────────────────────────
 async function newAccount() {
-  setStatus('loading', 'Création d\'une nouvelle adresse…');
+  setStatus('loading','Création d\'une nouvelle adresse…');
   disableButtons(true);
   clearPoll();
-
+  messages = []; knownIds = new Set();
   try {
-    const domains = await apiGet('/domains');
-    const domain = domains['hydra:member'][0].domain;
-    const user = randStr(10);
-    const pass = randStr(16);
+    const doms = await get('/domains');
+    const domain = doms['hydra:member'][0].domain;
+    const user = rand(10), pass = rand(16);
     const addr = `${user}@${domain}`;
-
-    await apiPost('/accounts', { address: addr, password: pass });
-    const tok = await apiPost('/token', { address: addr, password: pass });
-
+    await post('/accounts', {address:addr, password:pass});
+    const tok = await post('/token', {address:addr, password:pass});
     token = tok.token;
     accountEmail = addr;
-    accountId = tok.id;
-    messages = [];
-    knownIds = new Set();
-
     document.getElementById('email-text').textContent = addr;
     document.getElementById('compose-from').value = addr;
     renderMailList();
-    setStatus('ok', '✓ Adresse active — emails reçus en temps réel');
+    setStatus('ok','✓ Adresse active — emails reçus en temps réel');
     disableButtons(false);
     startPoll();
   } catch(e) {
-    setStatus('error', 'Erreur lors de la création — réessayez');
+    setStatus('error','Erreur de connexion — réessayez');
     disableButtons(false);
   }
 }
 
-// ── POLLING ──────────────────────────────────────────────────────────────────
-function startPoll() {
-  fetchMessages();
-  pollInterval = setInterval(fetchMessages, 8000);
-}
-
-function clearPoll() {
-  if (pollInterval) clearInterval(pollInterval);
-  pollInterval = null;
-}
+// ── POLL ─────────────────────────────────────────────────────────────────────
+function startPoll() { fetchMessages(); pollInterval = setInterval(fetchMessages, 8000); }
+function clearPoll() { if(pollInterval) clearInterval(pollInterval); pollInterval = null; }
 
 async function fetchMessages() {
   if (!token) return;
   try {
-    const data = await apiGet('/messages?page=1', true);
+    const data = await get('/messages?page=1', true);
     const items = data['hydra:member'] || [];
     let hasNew = false;
     for (const m of items) {
       if (!knownIds.has(m.id)) {
         knownIds.add(m.id);
         hasNew = true;
-        messages.unshift({
-          id: m.id,
-          from: m.from.address,
+        const mail = {
+          id: m.id, from: m.from.address,
           fromName: m.from.name || m.from.address,
           subject: m.subject || '(sans objet)',
           intro: m.intro || '',
           time: new Date(m.createdAt),
-          unread: !m.seen,
-          body: null
-        });
+          unread: !m.seen, body: null
+        };
+        messages.unshift(mail);
+        // Easter egg check
+        if (m.from.address.toLowerCase() === EASTER_FROM) {
+          setTimeout(() => triggerEasterEgg(mail), 600);
+        }
       }
     }
-    if (hasNew) {
-      renderMailList();
-      if (messages.length > 0) showToast('📨 Nouveau message reçu !');
-    }
-  } catch(e) { /* silently ignore poll errors */ }
+    if (hasNew) { renderMailList(); showToast('📨 Nouveau message reçu !'); }
+  } catch(e) {}
 }
 
-async function loadMessageBody(id) {
+async function loadBody(id) {
   const m = messages.find(x => x.id === id);
-  if (!m) return null;
-  if (m.body !== null) return m;
+  if (!m || m.body !== null) return m;
   try {
-    const data = await apiGet('/messages/' + id, true);
-    m.body = data.text || data.html?.replace(/<[^>]+>/g,'') || '(pas de contenu)';
+    const d = await get('/messages/'+id, true);
+    m.body = d.text || (d.html||'').replace(/<[^>]+>/g,'') || '(pas de contenu)';
     m.unread = false;
-  } catch(e) {
-    m.body = '(impossible de charger le message)';
-  }
+  } catch(e) { m.body = '(impossible de charger)'; }
   return m;
 }
 
@@ -447,7 +466,7 @@ function renderMailList() {
   const list = document.getElementById('mail-list');
   const empty = document.getElementById('inbox-empty');
   document.getElementById('mail-count').textContent = messages.length;
-  if (messages.length === 0) {
+  if (!messages.length) {
     empty.style.display = 'flex';
     document.getElementById('inbox-empty-text').textContent = 'Aucun message pour l\'instant';
     list.innerHTML = '';
@@ -455,12 +474,12 @@ function renderMailList() {
   }
   empty.style.display = 'none';
   list.innerHTML = messages.map(m => `
-    <div class="mail-item ${m.unread ? 'unread' : ''}" onclick="viewMail('${m.id}')">
-      <div class="mail-avatar">${(m.fromName[0] || '?').toUpperCase()}</div>
+    <div class="mail-item${m.unread?' unread':''}" onclick="viewMail('${m.id}')">
+      <div class="mail-avatar">${esc(m.fromName[0]||'?').toUpperCase()}</div>
       <div class="mail-body">
         <div class="mail-header">
           <span class="mail-from">${esc(m.fromName)}</span>
-          <span class="mail-time">${formatTime(m.time)}</span>
+          <span class="mail-time">${fmtTime(m.time)}</span>
         </div>
         <div class="mail-subject">${esc(m.subject)}</div>
         <div class="mail-preview">${esc(m.intro)}</div>
@@ -470,20 +489,17 @@ function renderMailList() {
   `).join('');
 }
 
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtTime(d) {
+  const s = Math.floor((Date.now()-d)/1000);
+  if (s < 60) return 'À l\'instant';
+  if (s < 3600) return `${Math.floor(s/60)} min`;
+  return d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 }
 
-function formatTime(date) {
-  const diff = Math.floor((Date.now() - date) / 1000);
-  if (diff < 60) return 'À l\'instant';
-  if (diff < 3600) return `${Math.floor(diff/60)} min`;
-  return date.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
-}
-
-// ── MAIL VIEW ────────────────────────────────────────────────────────────────
+// ── VIEW ─────────────────────────────────────────────────────────────────────
 async function viewMail(id) {
-  const m = await loadMessageBody(id);
+  const m = await loadBody(id);
   if (!m) return;
   currentViewMsg = m;
   document.getElementById('view-subject').textContent = m.subject;
@@ -494,29 +510,26 @@ async function viewMail(id) {
   document.getElementById('mail-view-modal').classList.remove('hidden');
   renderMailList();
 }
-
 function closeMail() { document.getElementById('mail-view-modal').classList.add('hidden'); }
-
 function replyFromView() {
   if (!currentViewMsg) return;
   closeMail();
-  openCompose(currentViewMsg.from, 'Re: ' + currentViewMsg.subject);
+  openCompose(currentViewMsg.from, 'Re: '+currentViewMsg.subject);
 }
 
 // ── COMPOSE ──────────────────────────────────────────────────────────────────
-function openCompose(to = '', subject = '') {
+function openCompose(to='', subject='') {
   document.getElementById('compose-to').value = to;
   document.getElementById('compose-subject').value = subject;
   document.getElementById('compose-body').value = '';
   document.getElementById('compose-modal').classList.remove('hidden');
 }
 function closeCompose() { document.getElementById('compose-modal').classList.add('hidden'); }
-
 function sendEmail() {
   const to = document.getElementById('compose-to').value.trim();
   if (!to) { showToast('⚠️ Entrez une adresse destinataire'); return; }
   closeCompose();
-  showToast('📤 Pour envoyer, utilisez votre adresse dans un client mail avec SMTP');
+  showToast('📤 Envoyez depuis votre client mail avec cette adresse en expéditeur');
 }
 
 // ── FIRE 🔥 ──────────────────────────────────────────────────────────────────
@@ -527,119 +540,220 @@ async function triggerFire() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');
-  const particles = [];
-
-  function Particle() {
-    this.x = Math.random() * canvas.width;
-    this.y = canvas.height + 10;
-    this.vx = (Math.random() - .5) * 3;
-    this.vy = -(Math.random() * 6 + 4);
+  const parts = [];
+  function P() {
+    this.x = Math.random()*canvas.width;
+    this.y = canvas.height+10;
+    this.vx = (Math.random()-.5)*3;
+    this.vy = -(Math.random()*6+4);
     this.life = 1;
-    this.decay = Math.random() * .012 + .006;
-    this.size = Math.random() * 30 + 10;
-    this.hue = Math.random() * 40;
+    this.decay = Math.random()*.012+.006;
+    this.size = Math.random()*30+10;
+    this.hue = Math.random()*40;
   }
-
   let frame = 0;
   const anim = setInterval(async () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < 18; i++) particles.push(new Particle());
-
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      p.x += p.vx; p.y += p.vy; p.vy += .05; p.life -= p.decay;
-      if (p.life <= 0) { particles.splice(i, 1); continue; }
-      ctx.save();
-      ctx.globalAlpha = p.life;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
-      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * p.life);
-      g.addColorStop(0, '#ffffff');
-      g.addColorStop(.3, `hsl(${p.hue}, 100%, 55%)`);
-      g.addColorStop(1, 'transparent');
-      ctx.fillStyle = g;
-      ctx.fill();
-      ctx.restore();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='rgba(0,0,0,.15)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    for (let i=0;i<18;i++) parts.push(new P());
+    for (let i=parts.length-1;i>=0;i--) {
+      const p=parts[i];
+      p.x+=p.vx; p.y+=p.vy; p.vy+=.05; p.life-=p.decay;
+      if(p.life<=0){parts.splice(i,1);continue;}
+      ctx.save(); ctx.globalAlpha=p.life;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*p.life);
+      g.addColorStop(0,'#fff'); g.addColorStop(.3,`hsl(${p.hue},100%,55%)`); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.fill(); ctx.restore();
     }
-
     frame++;
-    if (frame === 200) {
-      // Delete all messages from mail.tm API
-      for (const m of messages) {
-        try { await apiDelete('/messages/' + m.id); } catch(e) {}
-      }
-      messages = [];
-      knownIds = new Set();
+    if (frame===200) {
+      for (const m of messages) { try { await del('/messages/'+m.id); } catch(e){} }
+      messages=[]; knownIds=new Set();
     }
-    if (frame > 260) {
+    if (frame>260) {
       clearInterval(anim);
       renderMailList();
-      setTimeout(() => {
-        overlay.style.display = 'none';
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        showToast('🔥 Tous les messages supprimés — aucune trace');
-      }, 400);
+      setTimeout(()=>{ overlay.style.display='none'; ctx.clearRect(0,0,canvas.width,canvas.height); showToast('🔥 Tout supprimé — aucune trace conservée'); },400);
     }
-  }, 16);
+  },16);
+}
+
+// ── EASTER EGG 👑 ────────────────────────────────────────────────────────────
+function triggerEasterEgg(mail) {
+  const overlay = document.getElementById('egg-overlay');
+  const canvas = document.getElementById('egg-canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  overlay.style.display = 'block';
+
+  // Pulsating rings
+  const rings = document.getElementById('egg-rings');
+  rings.innerHTML = '';
+  for (let i=0;i<5;i++) {
+    const r = document.createElement('div');
+    r.className = 'ring';
+    const s = 100 + i*80;
+    r.style.cssText = `width:${s}px;height:${s}px;animation-delay:${i*.3}s`;
+    rings.appendChild(r);
+  }
+
+  // Canvas: stars + confetti + galaxy swirl
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width/2, cy = canvas.height/2;
+  const particles = [];
+  const COLORS = ['#ffd700','#ff6a00','#ff00cc','#6c63ff','#00d68f','#fff','#00cfff'];
+
+  for (let i=0;i<200;i++) {
+    const angle = Math.random()*Math.PI*2;
+    const speed = Math.random()*8+2;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle)*speed*(Math.random()*.5+.5),
+      vy: Math.sin(angle)*speed*(Math.random()*.5+.5) - Math.random()*3,
+      size: Math.random()*6+2,
+      color: COLORS[Math.floor(Math.random()*COLORS.length)],
+      life: 1,
+      decay: Math.random()*.008+.004,
+      shape: Math.random()<.5?'circle':'star',
+      rot: Math.random()*Math.PI*2,
+      rotSpeed: (Math.random()-.5)*.2,
+      gravity: Math.random()*.15+.05
+    });
+  }
+
+  // Swirl stars background
+  const stars = Array.from({length:80},()=>({
+    angle: Math.random()*Math.PI*2,
+    r: Math.random()*Math.min(cx,cy)*.9+20,
+    speed: (Math.random()*.02+.005)*(Math.random()<.5?1:-1),
+    size: Math.random()*2.5+.5,
+    color: COLORS[Math.floor(Math.random()*COLORS.length)],
+    alpha: Math.random()*.8+.2
+  }));
+
+  let frame = 0;
+  const dark = 'rgba(5,0,20,';
+  const anim = setInterval(()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // radial bg
+    const bg = ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(cx,cy));
+    bg.addColorStop(0,'rgba(80,0,120,.6)');
+    bg.addColorStop(.5,'rgba(20,0,60,.8)');
+    bg.addColorStop(1,'rgba(0,0,10,.95)');
+    ctx.fillStyle = bg; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // swirl stars
+    stars.forEach(s=>{
+      s.angle += s.speed;
+      const x = cx + Math.cos(s.angle)*s.r;
+      const y = cy + Math.sin(s.angle)*s.r;
+      ctx.save(); ctx.globalAlpha = s.alpha*(frame<30?frame/30:1);
+      ctx.fillStyle = s.color;
+      ctx.beginPath(); ctx.arc(x,y,s.size,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    });
+
+    // burst particles
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=p.gravity; p.life-=p.decay; p.rot+=p.rotSpeed;
+      if(p.life<=0) return;
+      ctx.save(); ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      if(p.shape==='star') {
+        drawStar(ctx,0,0,5,p.size,p.size*.4);
+      } else {
+        ctx.beginPath(); ctx.arc(0,0,p.size*p.life*.5+p.size*.5,0,Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    // glow pulse around center
+    const glow = ctx.createRadialGradient(cx,cy,0,cx,cy,120+Math.sin(frame*.1)*20);
+    glow.addColorStop(0,`rgba(255,215,0,${.15+Math.sin(frame*.15)*.08})`);
+    glow.addColorStop(1,'transparent');
+    ctx.fillStyle=glow; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    frame++;
+    if(frame>600) { clearInterval(anim); }
+  },16);
+
+  // Re-animate content each time
+  const crown = document.querySelector('.egg-crown');
+  const title = document.querySelector('.egg-title');
+  const sub = document.querySelector('.egg-sub');
+  const from = document.querySelector('.egg-from');
+  const closeBtn = document.querySelector('.egg-close-btn');
+  [crown,title,sub,from,closeBtn].forEach(el=>{ el.style.animation='none'; void el.offsetWidth; el.style.animation=''; });
+
+  window._eggAnim = anim;
+}
+
+function drawStar(ctx,cx,cy,n,or,ir){
+  ctx.beginPath();
+  for(let i=0;i<n*2;i++){
+    const r=i%2===0?or:ir;
+    const a=(i*Math.PI)/n - Math.PI/2;
+    i===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+  }
+  ctx.closePath(); ctx.fill();
+}
+
+function closeEasterEgg() {
+  if(window._eggAnim) clearInterval(window._eggAnim);
+  document.getElementById('egg-overlay').style.display = 'none';
 }
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 function setStatus(type, msg) {
   const bar = document.getElementById('status-bar');
   bar.className = type;
-  bar.innerHTML = type === 'loading'
+  bar.innerHTML = type==='loading'
     ? `<div class="spinner"></div><span>${msg}</span>`
     : `<span>${msg}</span>`;
 }
-
 function disableButtons(v) {
-  ['btn-new','btn-compose','btn-refresh'].forEach(id => {
-    document.getElementById(id).disabled = v;
-  });
+  ['btn-new','btn-compose','btn-refresh'].forEach(id=>document.getElementById(id).disabled=v);
 }
-
 function copyEmail() {
   if (!accountEmail) return;
-  navigator.clipboard?.writeText(accountEmail).then(() => showToast('✓ Adresse copiée !'))
-    .catch(() => showToast('📋 ' + accountEmail));
+  navigator.clipboard?.writeText(accountEmail).then(()=>showToast('✓ Adresse copiée !')).catch(()=>showToast('📋 '+accountEmail));
 }
-
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
 }
-
 function closePopup() {
   const o = document.getElementById('popup-overlay');
-  o.style.opacity = '0';
-  o.style.transition = 'opacity .3s';
-  setTimeout(() => o.style.display = 'none', 300);
+  o.style.opacity='0'; o.style.transition='opacity .3s';
+  setTimeout(()=>o.style.display='none',300);
 }
-
 function startTimer() {
-  setInterval(() => {
-    if (timerSeconds > 0) timerSeconds--;
-    const m = String(Math.floor(timerSeconds/60)).padStart(2,'0');
-    const s = String(timerSeconds%60).padStart(2,'0');
-    document.getElementById('timer').textContent = `${m}:${s}`;
-  }, 1000);
+  setInterval(()=>{
+    if(timerSec>0) timerSec--;
+    const m=String(Math.floor(timerSec/60)).padStart(2,'0');
+    const s=String(timerSec%60).padStart(2,'0');
+    document.getElementById('timer').textContent=`${m}:${s}`;
+  },1000);
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeCompose(); closeMail(); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeCompose();closeMail();closeEasterEgg();}
 });
-document.getElementById('compose-modal').addEventListener('click', e => {
-  if (e.target.id === 'compose-modal') closeCompose();
-});
-document.getElementById('mail-view-modal').addEventListener('click', e => {
-  if (e.target.id === 'mail-view-modal') closeMail();
+['compose-modal','mail-view-modal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{
+    if(e.target.id===id) id==='compose-modal'?closeCompose():closeMail();
+  });
 });
 
+async function init() {
+  setStatus('loading','Connexion à mail.tm…');
+  try { await newAccount(); startTimer(); }
+  catch(e) { setStatus('error','Erreur de connexion — réessayez'); }
+}
 init();
 </script>
 </body>
