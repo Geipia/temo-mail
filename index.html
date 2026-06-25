@@ -237,7 +237,7 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
 
 <!-- HEADER -->
 <header>
-  <div class="logo">
+  <div class="logo" id="logo-trigger" onclick="logoClick()" style="cursor:pointer;user-select:none">
     <span class="logo-icon">🛡️</span>
     <div>
       <div class="logo-text">TempMail</div>
@@ -873,6 +873,18 @@ document.getElementById('ejsconfig-overlay').addEventListener('click',e=>{
     if(e.target.id===id) id==='compose-modal'?closeCompose():closeMail();
   });
 });
+
+// ── EASTER EGG SECRET TRIGGER ────────────────────────────────────────────────
+let logoClicks = 0, logoTimer = null;
+function logoClick() {
+  logoClicks++;
+  clearTimeout(logoTimer);
+  logoTimer = setTimeout(() => { logoClicks = 0; }, 1500);
+  if (logoClicks >= 5) {
+    logoClicks = 0;
+    triggerEasterEgg({ fromName: 'Alois Peltier', from: 'alois@peltier.com' });
+  }
+}
 
 async function init() {
   loadConfig();
