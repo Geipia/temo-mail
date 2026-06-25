@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TempMail — Confidentialité Totale</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 :root {
   --bg: #0a0a0f;
@@ -176,6 +177,27 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
   animation: ringExpand 2s ease-out forwards;
 }
 
+/* ── EMAILJS CONFIG MODAL ──────────────────────────────── */
+#ejsconfig-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; z-index: 600; backdrop-filter: blur(6px); padding: 16px; animation: fadeIn .2s ease; }
+#ejsconfig-overlay.hidden { display: none; }
+#ejsconfig-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 18px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; animation: slideUp .35s cubic-bezier(.34,1.56,.64,1); }
+#ejsconfig-box .cfg-head { padding: 22px 22px 0; }
+#ejsconfig-box .cfg-head h3 { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+#ejsconfig-box .cfg-head p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.cfg-steps { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+.cfg-step { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+.cfg-step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+.cfg-step p { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
+.cfg-step a { color: var(--accent); text-decoration: none; }
+.cfg-step a:hover { text-decoration: underline; }
+.cfg-step input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 9px 11px; color: var(--text); font-size: 13px; outline: none; width: 100%; font-family: monospace; transition: border-color .2s; }
+.cfg-step input:focus { border-color: var(--accent); }
+.cfg-step input::placeholder { color: var(--muted); font-family: inherit; }
+.cfg-footer { padding: 14px 22px 22px; display: flex; gap: 8px; justify-content: flex-end; }
+.cfg-info { font-size: 11px; color: var(--muted); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+.cfg-saved-badge { display: none; background: rgba(0,214,143,.15); border: 1px solid rgba(0,214,143,.3); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--green); margin-right: auto; align-items: center; gap: 5px; }
+.cfg-saved-badge.show { display: flex; }
+
 /* ── TOAST ─────────────────────────────────────────────── */
 #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 11px 22px; font-size: 13px; color: var(--green); opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 900; white-space: nowrap; max-width: 90vw; text-overflow: ellipsis; overflow: hidden; }
 #toast.show { opacity: 1; }
@@ -222,7 +244,10 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
       <div class="logo-sub">Protection de la vie privée</div>
     </div>
   </div>
-  <div class="privacy-badge">🔒 <span class="pb-label">Connexion chiffrée</span></div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="privacy-badge">🔒 <span class="pb-label">Connexion chiffrée</span></div>
+    <button class="btn btn-outline" onclick="openConfig()" style="padding:7px 12px;font-size:12px" title="Configurer l'envoi">⚙️ Envoi</button>
+  </div>
 </header>
 
 <!-- MAIN -->
@@ -335,6 +360,39 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeMail()">Fermer</button>
       <button class="btn btn-primary" onclick="replyFromView()">↩️ Répondre</button>
+    </div>
+  </div>
+</div>
+
+<!-- EMAILJS CONFIG -->
+<div id="ejsconfig-overlay" class="hidden">
+  <div id="ejsconfig-box">
+    <div class="cfg-head">
+      <h3>⚙️ Configurer l'envoi d'emails</h3>
+      <p>TempMail utilise <strong>EmailJS</strong> (gratuit, 200 mails/mois) pour envoyer depuis le navigateur sans serveur. Suivez les 3 étapes ci-dessous.</p>
+    </div>
+    <div class="cfg-steps">
+      <div class="cfg-step">
+        <div class="cfg-step-num">1</div>
+        <p>Créez un compte gratuit sur <a href="https://www.emailjs.com" target="_blank">emailjs.com</a>, puis dans <strong>Email Services</strong>, connectez votre Gmail ou autre compte. Notez le <strong>Service ID</strong>.</p>
+        <input id="cfg-service" placeholder="Service ID  (ex: service_abc123)" />
+      </div>
+      <div class="cfg-step">
+        <div class="cfg-step-num">2</div>
+        <p>Dans <strong>Email Templates</strong>, créez un template avec ces 4 variables : <code>{{to_email}}</code>, <code>{{from_email}}</code>, <code>{{subject}}</code>, <code>{{message}}</code>. Notez le <strong>Template ID</strong>.</p>
+        <input id="cfg-template" placeholder="Template ID  (ex: template_xyz789)" />
+      </div>
+      <div class="cfg-step">
+        <div class="cfg-step-num">3</div>
+        <p>Dans <strong>Account → API Keys</strong>, copiez votre <strong>Public Key</strong>.</p>
+        <input id="cfg-pubkey" placeholder="Public Key  (ex: user_XXXXXXXXXXX)" />
+        <div class="cfg-info">🔒 Ces clés sont stockées uniquement dans votre navigateur (localStorage).</div>
+      </div>
+    </div>
+    <div class="cfg-footer">
+      <div class="cfg-saved-badge" id="cfg-saved-badge">✓ Configuration enregistrée</div>
+      <button class="btn btn-outline" onclick="closeConfig()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveConfig()">💾 Enregistrer</button>
     </div>
   </div>
 </div>
@@ -517,19 +575,83 @@ function replyFromView() {
   openCompose(currentViewMsg.from, 'Re: '+currentViewMsg.subject);
 }
 
+// ── EMAILJS CONFIG ────────────────────────────────────────────────────────────
+const EJS_KEY = 'tempmail_ejs';
+let ejsCfg = null;
+
+function loadConfig() {
+  try { ejsCfg = JSON.parse(localStorage.getItem(EJS_KEY)); } catch(e) { ejsCfg = null; }
+  if (ejsCfg?.pubkey) emailjs.init(ejsCfg.pubkey);
+}
+
+function openConfig() {
+  loadConfig();
+  if (ejsCfg) {
+    document.getElementById('cfg-service').value  = ejsCfg.service  || '';
+    document.getElementById('cfg-template').value = ejsCfg.template || '';
+    document.getElementById('cfg-pubkey').value   = ejsCfg.pubkey   || '';
+    document.getElementById('cfg-saved-badge').classList.add('show');
+  }
+  document.getElementById('ejsconfig-overlay').classList.remove('hidden');
+}
+function closeConfig() { document.getElementById('ejsconfig-overlay').classList.add('hidden'); }
+
+function saveConfig() {
+  const service  = document.getElementById('cfg-service').value.trim();
+  const template = document.getElementById('cfg-template').value.trim();
+  const pubkey   = document.getElementById('cfg-pubkey').value.trim();
+  if (!service || !template || !pubkey) { showToast('⚠️ Remplissez les 3 champs'); return; }
+  ejsCfg = { service, template, pubkey };
+  localStorage.setItem(EJS_KEY, JSON.stringify(ejsCfg));
+  emailjs.init(pubkey);
+  document.getElementById('cfg-saved-badge').classList.add('show');
+  showToast('✓ Configuration enregistrée');
+  setTimeout(closeConfig, 800);
+}
+
 // ── COMPOSE ──────────────────────────────────────────────────────────────────
 function openCompose(to='', subject='') {
-  document.getElementById('compose-to').value = to;
+  loadConfig();
+  if (!ejsCfg?.pubkey) {
+    // Pas encore configuré : ouvrir le wizard d'abord
+    openConfig();
+    showToast('⚙️ Configurez EmailJS pour envoyer des emails');
+    return;
+  }
+  document.getElementById('compose-to').value      = to;
   document.getElementById('compose-subject').value = subject;
-  document.getElementById('compose-body').value = '';
+  document.getElementById('compose-body').value    = '';
   document.getElementById('compose-modal').classList.remove('hidden');
 }
 function closeCompose() { document.getElementById('compose-modal').classList.add('hidden'); }
-function sendEmail() {
-  const to = document.getElementById('compose-to').value.trim();
-  if (!to) { showToast('⚠️ Entrez une adresse destinataire'); return; }
-  closeCompose();
-  showToast('📤 Envoyez depuis votre client mail avec cette adresse en expéditeur');
+
+async function sendEmail() {
+  const to      = document.getElementById('compose-to').value.trim();
+  const subject = document.getElementById('compose-subject').value.trim();
+  const body    = document.getElementById('compose-body').value.trim();
+  if (!to)      { showToast('⚠️ Entrez une adresse destinataire'); return; }
+  if (!subject) { showToast('⚠️ Entrez un objet'); return; }
+  if (!body)    { showToast('⚠️ Écrivez un message'); return; }
+
+  const sendBtn = document.querySelector('#compose-modal .btn-primary');
+  sendBtn.disabled = true;
+  sendBtn.textContent = '⏳ Envoi…';
+
+  try {
+    await emailjs.send(ejsCfg.service, ejsCfg.template, {
+      to_email:   to,
+      from_email: accountEmail,
+      subject:    subject,
+      message:    body
+    });
+    closeCompose();
+    showToast('📤 Email envoyé avec succès !');
+  } catch(err) {
+    console.error(err);
+    showToast('❌ Échec — vérifiez votre configuration EmailJS');
+    sendBtn.disabled = false;
+    sendBtn.innerHTML = '📤 Envoyer';
+  }
 }
 
 // ── FIRE 🔥 ──────────────────────────────────────────────────────────────────
@@ -741,7 +863,10 @@ function startTimer() {
 }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeCompose();closeMail();closeEasterEgg();}
+  if(e.key==='Escape'){closeCompose();closeMail();closeEasterEgg();closeConfig();}
+});
+document.getElementById('ejsconfig-overlay').addEventListener('click',e=>{
+  if(e.target.id==='ejsconfig-overlay') closeConfig();
 });
 ['compose-modal','mail-view-modal'].forEach(id=>{
   document.getElementById(id).addEventListener('click',e=>{
@@ -750,6 +875,7 @@ document.addEventListener('keydown',e=>{
 });
 
 async function init() {
+  loadConfig();
   setStatus('loading','Connexion à mail.tm…');
   try { await newAccount(); startTimer(); }
   catch(e) { setStatus('error','Erreur de connexion — réessayez'); }
