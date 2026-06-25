@@ -13,223 +13,89 @@
     --accent: #6c63ff;
     --accent2: #8b5cf6;
     --fire1: #ff4500;
-    --fire2: #ff6a00;
-    --fire3: #ffae00;
     --green: #00d68f;
+    --red: #ff4757;
     --text: #e8e8f0;
     --muted: #7070a0;
     --radius: 12px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-  body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ───── POPUP ───── */
-  #popup-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(6px);
-    animation: fadeIn .3s ease;
-  }
-  #popup {
-    background: linear-gradient(135deg, #12121a, #1a1a2e);
-    border: 1px solid var(--accent);
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 480px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 0 60px rgba(108,99,255,0.3);
-    animation: slideUp .4s cubic-bezier(.34,1.56,.64,1);
-  }
+  /* POPUP */
+  #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(6px); animation: fadeIn .3s ease; }
+  #popup { background: linear-gradient(135deg, #12121a, #1a1a2e); border: 1px solid var(--accent); border-radius: 20px; padding: 40px; max-width: 480px; width: 90%; text-align: center; box-shadow: 0 0 60px rgba(108,99,255,0.3); animation: slideUp .4s cubic-bezier(.34,1.56,.64,1); }
   #popup .shield { font-size: 64px; margin-bottom: 16px; display: block; }
   #popup h2 { font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
   #popup p { color: var(--muted); line-height: 1.6; margin-bottom: 8px; font-size: 15px; }
   #popup .highlight { color: var(--green); font-weight: 600; }
-  #popup .badges {
-    display: flex; gap: 10px; justify-content: center; margin: 20px 0;
-    flex-wrap: wrap;
-  }
-  #popup .badge {
-    background: rgba(108,99,255,0.15);
-    border: 1px solid rgba(108,99,255,0.3);
-    border-radius: 20px; padding: 6px 14px;
-    font-size: 13px; color: var(--accent2);
-  }
-  #popup-close {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff; border: none; border-radius: 10px;
-    padding: 14px 40px; font-size: 16px; font-weight: 600;
-    cursor: pointer; margin-top: 10px;
-    transition: transform .2s, box-shadow .2s;
-  }
+  #popup .badges { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+  #popup .badge { background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--accent2); }
+  #popup-close { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 10px; padding: 14px 40px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: transform .2s, box-shadow .2s; }
   #popup-close:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,0.4); }
 
-  /* ───── HEADER ───── */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-  }
+  /* HEADER */
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
   .logo { display: flex; align-items: center; gap: 10px; }
   .logo-icon { font-size: 28px; }
   .logo-text { font-size: 20px; font-weight: 700; color: var(--accent); }
   .logo-sub { font-size: 11px; color: var(--muted); margin-top: -2px; }
-  .privacy-badge {
-    background: rgba(0,214,143,0.1);
-    border: 1px solid rgba(0,214,143,0.3);
-    border-radius: 20px; padding: 6px 16px;
-    font-size: 13px; color: var(--green);
-    display: flex; align-items: center; gap: 6px;
-  }
+  .privacy-badge { background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.3); border-radius: 20px; padding: 6px 16px; font-size: 13px; color: var(--green); display: flex; align-items: center; gap: 6px; }
 
-  /* ───── MAIN LAYOUT ───── */
+  /* MAIN */
   .container { max-width: 900px; margin: 0 auto; padding: 32px 16px; }
 
-  /* ───── EMAIL ADDRESS BOX ───── */
-  .email-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-  }
-  .email-box::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--fire2));
-  }
-  .email-box-label {
-    font-size: 12px; color: var(--muted); text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 10px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .email-address-row {
-    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  }
-  .email-address {
-    font-size: 22px; font-weight: 700; color: var(--text);
-    flex: 1; word-break: break-all;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px; padding: 12px 16px;
-    cursor: pointer; transition: border-color .2s;
-    position: relative;
-  }
+  /* STATUS */
+  #status-bar { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  #status-bar.loading { color: var(--accent); }
+  #status-bar.ok { color: var(--green); }
+  #status-bar.error { color: var(--red); }
+  .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* EMAIL BOX */
+  .email-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .email-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2), #ff6a00); }
+  .email-box-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .email-address-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .email-address { font-size: 20px; font-weight: 700; color: var(--text); flex: 1; word-break: break-all; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; cursor: pointer; transition: border-color .2s; }
   .email-address:hover { border-color: var(--accent); }
-  .email-address .copy-hint {
-    font-size: 11px; color: var(--muted); font-weight: 400;
-    display: block; margin-top: 2px;
-  }
-  .btn {
-    border: none; border-radius: 8px; padding: 12px 20px;
-    font-size: 14px; font-weight: 600; cursor: pointer;
-    transition: all .2s; display: flex; align-items: center; gap: 8px;
-    white-space: nowrap;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-  .expire-info {
-    margin-top: 14px; display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: var(--muted);
-  }
+  .email-address .copy-hint { font-size: 11px; color: var(--muted); font-weight: 400; display: block; margin-top: 2px; }
+  .btn { border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+  .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .expire-info { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
   .expire-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 
-  /* ───── PRIVACY STRIP ───── */
-  .privacy-strip {
-    background: linear-gradient(135deg, rgba(0,214,143,0.08), rgba(108,99,255,0.08));
-    border: 1px solid rgba(0,214,143,0.2);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    margin-bottom: 24px;
-    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
-  }
+  /* PRIVACY STRIP */
+  .privacy-strip { background: linear-gradient(135deg, rgba(0,214,143,0.08), rgba(108,99,255,0.08)); border: 1px solid rgba(0,214,143,0.2); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 24px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
   .privacy-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
   .privacy-item span:first-child { font-size: 18px; }
   .privacy-item strong { color: var(--green); }
 
-  /* ───── TOOLBAR ───── */
-  .toolbar {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
-  }
+  /* TOOLBAR */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
   .toolbar-left { display: flex; align-items: center; gap: 10px; }
   .inbox-title { font-size: 18px; font-weight: 700; }
-  .inbox-count {
-    background: var(--accent); color: #fff;
-    border-radius: 20px; padding: 2px 10px; font-size: 12px; font-weight: 700;
-  }
+  .inbox-count { background: var(--accent); color: #fff; border-radius: 20px; padding: 2px 10px; font-size: 12px; font-weight: 700; }
+  .toolbar-right { display: flex; gap: 10px; }
 
-  /* ───── FIRE BUTTON ───── */
-  #fire-btn {
-    background: linear-gradient(135deg, #ff4500, #ff6a00);
-    color: #fff; border: none; border-radius: 8px;
-    padding: 12px 20px; font-size: 14px; font-weight: 700;
-    cursor: pointer; display: flex; align-items: center; gap: 8px;
-    transition: all .2s; position: relative; overflow: hidden;
-  }
-  #fire-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(255,69,0,0.5);
-  }
-  #fire-btn .btn-icon { font-size: 20px; }
+  /* FIRE BTN */
+  #fire-btn { background: linear-gradient(135deg, #ff4500, #ff6a00); color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all .2s; }
+  #fire-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255,69,0,0.5); }
 
-  /* ───── INBOX ───── */
-  .inbox {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    min-height: 300px;
-  }
-  .inbox-empty {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 80px 20px; text-align: center;
-    color: var(--muted);
-  }
+  /* INBOX */
+  .inbox { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; min-height: 300px; }
+  .inbox-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; text-align: center; color: var(--muted); }
   .inbox-empty .icon { font-size: 64px; margin-bottom: 16px; opacity: .4; }
-  .inbox-empty p { font-size: 15px; }
-  .inbox-empty small { font-size: 13px; margin-top: 6px; display: block; }
-
-  .mail-item {
-    display: flex; align-items: flex-start; gap: 16px;
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background .2s;
-    animation: slideIn .3s ease;
-  }
+  .mail-item { display: flex; align-items: flex-start; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .2s; animation: slideIn .3s ease; }
   .mail-item:last-child { border-bottom: none; }
   .mail-item:hover { background: var(--surface2); }
   .mail-item.unread { background: rgba(108,99,255,0.05); }
-  .mail-avatar {
-    width: 42px; height: 42px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0;
-  }
+  .mail-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0; }
   .mail-body { flex: 1; min-width: 0; }
   .mail-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
   .mail-from { font-weight: 600; font-size: 14px; }
@@ -238,122 +104,55 @@
   .mail-preview { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex-shrink: 0; }
 
-  /* ───── COMPOSE MODAL ───── */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 500;
-    backdrop-filter: blur(4px);
-    animation: fadeIn .2s ease;
-  }
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); animation: fadeIn .2s ease; }
   .modal-overlay.hidden { display: none; }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    width: 90%; max-width: 580px;
-    animation: slideUp .3s cubic-bezier(.34,1.56,.64,1);
-    overflow: hidden;
-  }
-  .modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-  }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 90%; max-width: 580px; animation: slideUp .3s cubic-bezier(.34,1.56,.64,1); overflow: hidden; }
+  .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
   .modal-header h3 { font-size: 18px; font-weight: 700; }
-  .modal-close {
-    background: none; border: none; color: var(--muted);
-    font-size: 22px; cursor: pointer; padding: 0 4px;
-    transition: color .2s;
-  }
+  .modal-close { background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; padding: 0 4px; transition: color .2s; }
   .modal-close:hover { color: var(--text); }
   .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
   .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group label { font-size: 13px; color: var(--muted); }
-  .form-group input, .form-group textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px; padding: 12px 14px;
-    color: var(--text); font-size: 14px;
-    transition: border-color .2s;
-    outline: none; font-family: inherit;
-    resize: none;
-  }
+  .form-group input, .form-group textarea, .form-group select { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 14px; transition: border-color .2s; outline: none; font-family: inherit; resize: none; }
   .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
   .form-group textarea { height: 140px; }
-  .modal-footer {
-    padding: 16px 24px;
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: flex-end; gap: 10px;
-  }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
 
-  /* ───── MAIL VIEW ───── */
-  #mail-view-modal .modal { max-width: 680px; }
-  .mail-view-header { margin-bottom: 20px; }
+  /* MAIL VIEW */
   .mail-view-subject { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
-  .mail-view-meta { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+  .mail-view-meta { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); margin-bottom: 20px; }
   .mail-view-meta span strong { color: var(--text); }
-  .mail-view-body {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px; padding: 20px;
-    font-size: 14px; line-height: 1.7;
-    color: var(--text); white-space: pre-wrap;
-  }
+  .mail-view-body { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; font-size: 14px; line-height: 1.7; color: var(--text); white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
 
-  /* ───── FIRE OVERLAY ───── */
-  #fire-overlay {
-    position: fixed; inset: 0;
-    z-index: 2000;
-    display: none;
-    pointer-events: none;
-  }
+  /* FIRE OVERLAY */
+  #fire-overlay { position: fixed; inset: 0; z-index: 2000; display: none; pointer-events: none; }
   #fire-canvas { width: 100%; height: 100%; display: block; }
-  #fire-text {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    text-align: center; color: #fff;
-    text-shadow: 0 0 20px var(--fire1);
-    animation: fireText 2s ease forwards;
-    pointer-events: none;
-  }
+  #fire-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #fff; text-shadow: 0 0 20px var(--fire1); animation: fireText 2.5s ease forwards; pointer-events: none; }
   #fire-text h2 { font-size: 48px; font-weight: 900; }
   #fire-text p { font-size: 18px; margin-top: 8px; opacity: .9; }
 
-  /* ───── COPY TOAST ───── */
-  #toast {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 12px 24px;
-    font-size: 14px; color: var(--green);
-    opacity: 0; pointer-events: none;
-    transition: opacity .3s;
-    z-index: 900;
-  }
+  /* TOAST */
+  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 24px; font-size: 14px; color: var(--green); opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 900; white-space: nowrap; }
   #toast.show { opacity: 1; }
 
-  /* ───── ANIMATIONS ───── */
+  /* ANIMATIONS */
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-  @keyframes fireText {
-    0% { opacity: 0; transform: translate(-50%, -40%); }
-    20% { opacity: 1; transform: translate(-50%, -50%); }
-    80% { opacity: 1; transform: translate(-50%, -50%); }
-    100% { opacity: 0; transform: translate(-50%, -60%); }
-  }
+  @keyframes fireText { 0% { opacity: 0; transform: translate(-50%,-40%); } 20% { opacity: 1; transform: translate(-50%,-50%); } 80% { opacity: 1; transform: translate(-50%,-50%); } 100% { opacity: 0; transform: translate(-50%,-60%); } }
 
   @media (max-width: 600px) {
-    .email-address { font-size: 16px; }
+    .email-address { font-size: 15px; }
     #popup h2 { font-size: 20px; }
-    .privacy-strip { gap: 12px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ───── POPUP ───── -->
+<!-- POPUP -->
 <div id="popup-overlay">
   <div id="popup">
     <span class="shield">🛡️</span>
@@ -370,7 +169,7 @@
   </div>
 </div>
 
-<!-- ───── HEADER ───── -->
+<!-- HEADER -->
 <header>
   <div class="logo">
     <span class="logo-icon">🛡️</span>
@@ -382,60 +181,60 @@
   <div class="privacy-badge">🔒 Connexion chiffrée</div>
 </header>
 
-<!-- ───── MAIN ───── -->
 <div class="container">
 
-  <!-- Email Box -->
+  <div id="status-bar" class="loading">
+    <div class="spinner"></div>
+    <span id="status-text">Connexion à mail.tm…</span>
+  </div>
+
   <div class="email-box">
     <div class="email-box-label">🛡️ Votre adresse temporaire</div>
     <div class="email-address-row">
       <div class="email-address" id="email-display" onclick="copyEmail()">
-        <span id="email-text">chargement...</span>
+        <span id="email-text">chargement…</span>
         <span class="copy-hint">Cliquer pour copier</span>
       </div>
-      <button class="btn btn-primary" onclick="generateEmail()">🔄 Nouvelle</button>
-      <button class="btn btn-outline" onclick="openCompose()">✉️ Envoyer</button>
+      <button class="btn btn-primary" id="btn-new" onclick="newAccount()" disabled>🔄 Nouvelle</button>
+      <button class="btn btn-outline" id="btn-compose" onclick="openCompose()" disabled>✉️ Envoyer</button>
     </div>
     <div class="expire-info">
       <div class="expire-dot"></div>
-      Expire dans <strong id="timer" style="color:var(--green);margin:0 4px;">60:00</strong> — Aucune donnée conservée après expiration
+      Session active — <strong id="timer" style="color:var(--green);margin:0 4px;">60:00</strong> — Aucune donnée conservée
     </div>
   </div>
 
-  <!-- Privacy Strip -->
   <div class="privacy-strip">
     <div class="privacy-item"><span>🔒</span><span>Messages <strong>chiffrés</strong></span></div>
     <div class="privacy-item"><span>👁️‍🗨️</span><span><strong>Aucun</strong> traçage IP</span></div>
     <div class="privacy-item"><span>🚫</span><span><strong>Zéro</strong> publicité</span></div>
     <div class="privacy-item"><span>🗑️</span><span>Auto-suppression <strong>garantie</strong></span></div>
-    <div class="privacy-item"><span>🌐</span><span>Open source &amp; <strong>transparent</strong></span></div>
+    <div class="privacy-item"><span>⚡</span><span>Emails <strong>réels</strong> en temps réel</span></div>
   </div>
 
-  <!-- Toolbar -->
   <div class="toolbar">
     <div class="toolbar-left">
       <span class="inbox-title">📥 Boîte de réception</span>
       <span class="inbox-count" id="mail-count">0</span>
     </div>
-    <button id="fire-btn" onclick="triggerFire()">
-      <span class="btn-icon">🔥</span>
-      Tout supprimer
-    </button>
+    <div class="toolbar-right">
+      <button class="btn btn-outline" id="btn-refresh" onclick="fetchMessages()" disabled title="Rafraîchir">🔄 Rafraîchir</button>
+      <button id="fire-btn" onclick="triggerFire()">🔥 Tout supprimer</button>
+    </div>
   </div>
 
-  <!-- Inbox -->
-  <div class="inbox" id="inbox">
+  <div class="inbox">
     <div class="inbox-empty" id="inbox-empty">
       <div class="icon">📭</div>
-      <p>Aucun message pour l'instant</p>
-      <small>Les emails arriveront ici en temps réel — aucun stockage permanent</small>
+      <p id="inbox-empty-text">En attente de connexion…</p>
+      <small>Les vrais emails arriveront ici</small>
     </div>
     <div id="mail-list"></div>
   </div>
 
 </div>
 
-<!-- ───── COMPOSE MODAL ───── -->
+<!-- COMPOSE -->
 <div class="modal-overlay hidden" id="compose-modal">
   <div class="modal">
     <div class="modal-header">
@@ -453,12 +252,13 @@
       </div>
       <div class="form-group">
         <label>Objet</label>
-        <input type="text" id="compose-subject" placeholder="Objet du message...">
+        <input type="text" id="compose-subject" placeholder="Objet du message…">
       </div>
       <div class="form-group">
         <label>Message</label>
-        <textarea id="compose-body" placeholder="Votre message..."></textarea>
+        <textarea id="compose-body" placeholder="Votre message…"></textarea>
       </div>
+      <p style="font-size:12px;color:var(--muted)">⚠️ L'envoi d'emails sortants nécessite un relai SMTP. Cet adresse est optimisée pour la <strong>réception</strong>.</p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeCompose()">Annuler</button>
@@ -467,7 +267,7 @@
   </div>
 </div>
 
-<!-- ───── MAIL VIEW MODAL ───── -->
+<!-- MAIL VIEW -->
 <div class="modal-overlay hidden" id="mail-view-modal">
   <div class="modal" style="max-width:680px">
     <div class="modal-header">
@@ -475,13 +275,11 @@
       <button class="modal-close" onclick="closeMail()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="mail-view-header">
-        <div class="mail-view-subject" id="view-subject"></div>
-        <div class="mail-view-meta">
-          <span><strong>De :</strong> <span id="view-from"></span></span>
-          <span><strong>À :</strong> <span id="view-to"></span></span>
-          <span><strong>Reçu :</strong> <span id="view-time"></span></span>
-        </div>
+      <div class="mail-view-subject" id="view-subject"></div>
+      <div class="mail-view-meta">
+        <span><strong>De :</strong> <span id="view-from"></span></span>
+        <span><strong>À :</strong> <span id="view-to"></span></span>
+        <span><strong>Reçu :</strong> <span id="view-time"></span></span>
       </div>
       <div class="mail-view-body" id="view-body"></div>
     </div>
@@ -492,7 +290,7 @@
   </div>
 </div>
 
-<!-- ───── FIRE OVERLAY ───── -->
+<!-- FIRE OVERLAY -->
 <div id="fire-overlay">
   <canvas id="fire-canvas"></canvas>
   <div id="fire-text">
@@ -501,79 +299,211 @@
   </div>
 </div>
 
-<!-- ───── TOAST ───── -->
-<div id="toast">✓ Copié dans le presse-papier</div>
+<div id="toast"></div>
 
 <script>
-// ─── STATE ───────────────────────────────────────
-let currentEmail = '';
-let emails = [];
+// ── MAIL.TM API ──────────────────────────────────────────────────────────────
+const API = 'https://api.mail.tm';
+let token = null;
+let accountEmail = '';
+let accountId = '';
+let messages = [];
+let pollInterval = null;
 let timerSeconds = 3600;
-let timerInterval;
-let currentViewEmail = null;
+let currentViewMsg = null;
+let knownIds = new Set();
 
-const domains = ['tempmail.io', 'privmail.net', 'anonbox.fr', 'mailsafe.eu', 'quickdrop.io'];
-const firstNames = ['alice','bob','charlie','david','emma','felix','grace','hugo','iris','jack'];
-
-// ─── INIT ────────────────────────────────────────
-function init() {
-  generateEmail();
-  startTimer();
-  // Simulate incoming emails
-  setTimeout(() => addFakeEmail(), 4000);
-  setTimeout(() => addFakeEmail(), 9000);
-  setTimeout(() => addFakeEmail(), 18000);
+async function apiGet(path, auth = false) {
+  const h = { 'Content-Type': 'application/json' };
+  if (auth) h['Authorization'] = 'Bearer ' + token;
+  const r = await fetch(API + path, { headers: h });
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
 }
 
-function generateEmail() {
-  const name = firstNames[Math.floor(Math.random()*firstNames.length)];
-  const num = Math.floor(Math.random()*9000)+1000;
-  const domain = domains[Math.floor(Math.random()*domains.length)];
-  currentEmail = `${name}${num}@${domain}`;
-  document.getElementById('email-text').textContent = currentEmail;
-  document.getElementById('compose-from').value = currentEmail;
-  emails = [];
+async function apiPost(path, body) {
+  const r = await fetch(API + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function apiDelete(path) {
+  await fetch(API + path, {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + token }
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+async function init() {
+  setStatus('loading', 'Connexion à mail.tm…');
+  try {
+    await newAccount();
+    startTimer();
+  } catch(e) {
+    setStatus('error', 'Erreur de connexion — réessayez');
+    document.getElementById('inbox-empty-text').textContent = 'Impossible de se connecter à mail.tm';
+  }
+}
+
+function randStr(n) {
+  const c = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({length: n}, () => c[Math.floor(Math.random()*c.length)]).join('');
+}
+
+async function newAccount() {
+  setStatus('loading', 'Création d\'une nouvelle adresse…');
+  disableButtons(true);
+  clearPoll();
+
+  try {
+    const domains = await apiGet('/domains');
+    const domain = domains['hydra:member'][0].domain;
+    const user = randStr(10);
+    const pass = randStr(16);
+    const addr = `${user}@${domain}`;
+
+    await apiPost('/accounts', { address: addr, password: pass });
+    const tok = await apiPost('/token', { address: addr, password: pass });
+
+    token = tok.token;
+    accountEmail = addr;
+    accountId = tok.id;
+    messages = [];
+    knownIds = new Set();
+
+    document.getElementById('email-text').textContent = addr;
+    document.getElementById('compose-from').value = addr;
+    renderMailList();
+    setStatus('ok', '✓ Adresse active — emails reçus en temps réel');
+    disableButtons(false);
+    startPoll();
+  } catch(e) {
+    setStatus('error', 'Erreur lors de la création — réessayez');
+    disableButtons(false);
+  }
+}
+
+// ── POLLING ──────────────────────────────────────────────────────────────────
+function startPoll() {
+  fetchMessages();
+  pollInterval = setInterval(fetchMessages, 8000);
+}
+
+function clearPoll() {
+  if (pollInterval) clearInterval(pollInterval);
+  pollInterval = null;
+}
+
+async function fetchMessages() {
+  if (!token) return;
+  try {
+    const data = await apiGet('/messages?page=1', true);
+    const items = data['hydra:member'] || [];
+    let hasNew = false;
+    for (const m of items) {
+      if (!knownIds.has(m.id)) {
+        knownIds.add(m.id);
+        hasNew = true;
+        messages.unshift({
+          id: m.id,
+          from: m.from.address,
+          fromName: m.from.name || m.from.address,
+          subject: m.subject || '(sans objet)',
+          intro: m.intro || '',
+          time: new Date(m.createdAt),
+          unread: !m.seen,
+          body: null
+        });
+      }
+    }
+    if (hasNew) {
+      renderMailList();
+      if (messages.length > 0) showToast('📨 Nouveau message reçu !');
+    }
+  } catch(e) { /* silently ignore poll errors */ }
+}
+
+async function loadMessageBody(id) {
+  const m = messages.find(x => x.id === id);
+  if (!m) return null;
+  if (m.body !== null) return m;
+  try {
+    const data = await apiGet('/messages/' + id, true);
+    m.body = data.text || data.html?.replace(/<[^>]+>/g,'') || '(pas de contenu)';
+    m.unread = false;
+  } catch(e) {
+    m.body = '(impossible de charger le message)';
+  }
+  return m;
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function renderMailList() {
+  const list = document.getElementById('mail-list');
+  const empty = document.getElementById('inbox-empty');
+  document.getElementById('mail-count').textContent = messages.length;
+  if (messages.length === 0) {
+    empty.style.display = 'flex';
+    document.getElementById('inbox-empty-text').textContent = 'Aucun message pour l\'instant';
+    list.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = messages.map(m => `
+    <div class="mail-item ${m.unread ? 'unread' : ''}" onclick="viewMail('${m.id}')">
+      <div class="mail-avatar">${(m.fromName[0] || '?').toUpperCase()}</div>
+      <div class="mail-body">
+        <div class="mail-header">
+          <span class="mail-from">${esc(m.fromName)}</span>
+          <span class="mail-time">${formatTime(m.time)}</span>
+        </div>
+        <div class="mail-subject">${esc(m.subject)}</div>
+        <div class="mail-preview">${esc(m.intro)}</div>
+      </div>
+      ${m.unread ? '<div class="unread-dot"></div>' : ''}
+    </div>
+  `).join('');
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatTime(date) {
+  const diff = Math.floor((Date.now() - date) / 1000);
+  if (diff < 60) return 'À l\'instant';
+  if (diff < 3600) return `${Math.floor(diff/60)} min`;
+  return date.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+}
+
+// ── MAIL VIEW ────────────────────────────────────────────────────────────────
+async function viewMail(id) {
+  const m = await loadMessageBody(id);
+  if (!m) return;
+  currentViewMsg = m;
+  document.getElementById('view-subject').textContent = m.subject;
+  document.getElementById('view-from').textContent = `${m.fromName} <${m.from}>`;
+  document.getElementById('view-to').textContent = accountEmail;
+  document.getElementById('view-time').textContent = m.time.toLocaleString('fr-FR');
+  document.getElementById('view-body').textContent = m.body;
+  document.getElementById('mail-view-modal').classList.remove('hidden');
   renderMailList();
-  resetTimer();
 }
 
-// ─── TIMER ───────────────────────────────────────
-function startTimer() {
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    if (timerSeconds <= 0) { timerSeconds = 3600; }
-    const m = String(Math.floor(timerSeconds/60)).padStart(2,'0');
-    const s = String(timerSeconds%60).padStart(2,'0');
-    document.getElementById('timer').textContent = `${m}:${s}`;
-  }, 1000);
+function closeMail() { document.getElementById('mail-view-modal').classList.add('hidden'); }
+
+function replyFromView() {
+  if (!currentViewMsg) return;
+  closeMail();
+  openCompose(currentViewMsg.from, 'Re: ' + currentViewMsg.subject);
 }
 
-function resetTimer() {
-  timerSeconds = 3600;
-}
-
-// ─── POPUP ───────────────────────────────────────
-function closePopup() {
-  const overlay = document.getElementById('popup-overlay');
-  overlay.style.opacity = '0';
-  overlay.style.transition = 'opacity .3s';
-  setTimeout(() => overlay.style.display = 'none', 300);
-}
-
-// ─── COPY ────────────────────────────────────────
-function copyEmail() {
-  if (!navigator.clipboard) { showToast('📋 ' + currentEmail); return; }
-  navigator.clipboard.writeText(currentEmail).then(() => showToast('✓ Adresse copiée !'));
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ─── COMPOSE ─────────────────────────────────────
+// ── COMPOSE ──────────────────────────────────────────────────────────────────
 function openCompose(to = '', subject = '') {
   document.getElementById('compose-to').value = to;
   document.getElementById('compose-subject').value = subject;
@@ -584,106 +514,13 @@ function closeCompose() { document.getElementById('compose-modal').classList.add
 
 function sendEmail() {
   const to = document.getElementById('compose-to').value.trim();
-  const subject = document.getElementById('compose-subject').value.trim();
-  const body = document.getElementById('compose-body').value.trim();
-  if (!to || !subject || !body) { showToast('⚠️ Remplissez tous les champs'); return; }
+  if (!to) { showToast('⚠️ Entrez une adresse destinataire'); return; }
   closeCompose();
-  showToast('📤 Message envoyé avec confidentialité totale');
+  showToast('📤 Pour envoyer, utilisez votre adresse dans un client mail avec SMTP');
 }
 
-// ─── MAIL LIST ───────────────────────────────────
-const fakeSenders = [
-  { name: 'GitHub', email: 'noreply@github.com', avatar: 'G', subjects: ['Votre dépôt a été forké', 'Nouvelle PR ouverte', 'Action terminée avec succès'] },
-  { name: 'Notion', email: 'hello@notion.so', avatar: 'N', subjects: ['Bienvenue sur Notion !', 'Votre espace de travail est prêt'] },
-  { name: 'Stripe', email: 'support@stripe.com', avatar: 'S', subjects: ['Paiement reçu', 'Récapitulatif de votre compte'] },
-  { name: 'Vercel', email: 'noreply@vercel.com', avatar: 'V', subjects: ['Déploiement réussi 🚀', 'Votre domaine est actif'] },
-  { name: 'OpenAI', email: 'noreply@openai.com', avatar: 'O', subjects: ['Bienvenue dans OpenAI', 'Votre clé API est prête'] },
-];
-const fakeBodies = [
-  `Bonjour,\n\nNous vous confirmons la réception de votre demande.\n\nCet email a été envoyé à votre adresse temporaire et ne sera pas conservé.\n\nCordialement,\nL'équipe`,
-  `Salut !\n\nTout est prêt de notre côté. Votre compte a bien été créé.\n\nVous pouvez maintenant vous connecter et commencer à utiliser le service.\n\nBonne journée !`,
-  `Cher utilisateur,\n\nNous vous informons que votre action a bien été prise en compte.\n\nAucune donnée personnelle n'a été stockée lors de cette opération.\n\nMerci de nous faire confiance.`,
-];
-
-function addFakeEmail() {
-  const sender = fakeSenders[Math.floor(Math.random()*fakeSenders.length)];
-  const subject = sender.subjects[Math.floor(Math.random()*sender.subjects.length)];
-  const body = fakeBodies[Math.floor(Math.random()*fakeBodies.length)];
-  const mail = {
-    id: Date.now(),
-    from: sender.email,
-    fromName: sender.name,
-    avatar: sender.avatar,
-    to: currentEmail,
-    subject,
-    body,
-    time: new Date(),
-    unread: true,
-  };
-  emails.unshift(mail);
-  renderMailList();
-  showToast('📨 Nouveau message de ' + sender.name);
-}
-
-function renderMailList() {
-  const list = document.getElementById('mail-list');
-  const empty = document.getElementById('inbox-empty');
-  const count = document.getElementById('mail-count');
-  count.textContent = emails.length;
-  if (emails.length === 0) {
-    empty.style.display = 'flex';
-    list.innerHTML = '';
-    return;
-  }
-  empty.style.display = 'none';
-  list.innerHTML = emails.map(m => `
-    <div class="mail-item ${m.unread ? 'unread' : ''}" onclick="viewMail(${m.id})">
-      <div class="mail-avatar">${m.avatar}</div>
-      <div class="mail-body">
-        <div class="mail-header">
-          <span class="mail-from">${m.fromName}</span>
-          <span class="mail-time">${formatTime(m.time)}</span>
-        </div>
-        <div class="mail-subject">${m.subject}</div>
-        <div class="mail-preview">${m.body.split('\n')[2] || ''}</div>
-      </div>
-      ${m.unread ? '<div class="unread-dot"></div>' : ''}
-    </div>
-  `).join('');
-}
-
-function formatTime(date) {
-  const now = new Date();
-  const diff = Math.floor((now - date) / 1000);
-  if (diff < 60) return 'À l\'instant';
-  if (diff < 3600) return `${Math.floor(diff/60)} min`;
-  return date.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
-}
-
-function viewMail(id) {
-  const mail = emails.find(m => m.id === id);
-  if (!mail) return;
-  mail.unread = false;
-  currentViewEmail = mail;
-  document.getElementById('view-subject').textContent = mail.subject;
-  document.getElementById('view-from').textContent = `${mail.fromName} <${mail.from}>`;
-  document.getElementById('view-to').textContent = mail.to;
-  document.getElementById('view-time').textContent = mail.time.toLocaleString('fr-FR');
-  document.getElementById('view-body').textContent = mail.body;
-  document.getElementById('mail-view-modal').classList.remove('hidden');
-  renderMailList();
-}
-
-function closeMail() { document.getElementById('mail-view-modal').classList.add('hidden'); }
-
-function replyFromView() {
-  if (!currentViewEmail) return;
-  closeMail();
-  openCompose(currentViewEmail.from, 'Re: ' + currentViewEmail.subject);
-}
-
-// ─── FIRE 🔥 ─────────────────────────────────────
-function triggerFire() {
+// ── FIRE 🔥 ──────────────────────────────────────────────────────────────────
+async function triggerFire() {
   const overlay = document.getElementById('fire-overlay');
   const canvas = document.getElementById('fire-canvas');
   overlay.style.display = 'block';
@@ -695,65 +532,112 @@ function triggerFire() {
   function Particle() {
     this.x = Math.random() * canvas.width;
     this.y = canvas.height + 10;
-    this.vx = (Math.random() - 0.5) * 3;
+    this.vx = (Math.random() - .5) * 3;
     this.vy = -(Math.random() * 6 + 4);
     this.life = 1;
-    this.decay = Math.random() * 0.012 + 0.006;
+    this.decay = Math.random() * .012 + .006;
     this.size = Math.random() * 30 + 10;
-    this.color = ['#ff4500','#ff6a00','#ffae00','#ff2200','#ff8800'][Math.floor(Math.random()*5)];
+    this.hue = Math.random() * 40;
   }
 
   let frame = 0;
-  const anim = setInterval(() => {
+  const anim = setInterval(async () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'rgba(0,0,0,0.15)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0; i < 15; i++) particles.push(new Particle());
+    for (let i = 0; i < 18; i++) particles.push(new Particle());
 
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.05;
-      p.life -= p.decay;
+      p.x += p.vx; p.y += p.vy; p.vy += .05; p.life -= p.decay;
       if (p.life <= 0) { particles.splice(i, 1); continue; }
       ctx.save();
       ctx.globalAlpha = p.life;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * p.life);
-      grad.addColorStop(0, '#ffffff');
-      grad.addColorStop(0.3, p.color);
-      grad.addColorStop(1, 'transparent');
-      ctx.fillStyle = grad;
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * p.life);
+      g.addColorStop(0, '#ffffff');
+      g.addColorStop(.3, `hsl(${p.hue}, 100%, 55%)`);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
       ctx.fill();
       ctx.restore();
     }
 
     frame++;
-    if (frame > 240) {
+    if (frame === 200) {
+      // Delete all messages from mail.tm API
+      for (const m of messages) {
+        try { await apiDelete('/messages/' + m.id); } catch(e) {}
+      }
+      messages = [];
+      knownIds = new Set();
+    }
+    if (frame > 260) {
       clearInterval(anim);
-      emails = [];
       renderMailList();
       setTimeout(() => {
         overlay.style.display = 'none';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        showToast('🔥 Tout a été supprimé — Aucune trace conservée');
+        showToast('🔥 Tous les messages supprimés — aucune trace');
       }, 400);
     }
   }, 16);
 }
 
-// ─── KEYBOARD & MISC ─────────────────────────────
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function setStatus(type, msg) {
+  const bar = document.getElementById('status-bar');
+  bar.className = type;
+  bar.innerHTML = type === 'loading'
+    ? `<div class="spinner"></div><span>${msg}</span>`
+    : `<span>${msg}</span>`;
+}
+
+function disableButtons(v) {
+  ['btn-new','btn-compose','btn-refresh'].forEach(id => {
+    document.getElementById(id).disabled = v;
+  });
+}
+
+function copyEmail() {
+  if (!accountEmail) return;
+  navigator.clipboard?.writeText(accountEmail).then(() => showToast('✓ Adresse copiée !'))
+    .catch(() => showToast('📋 ' + accountEmail));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function closePopup() {
+  const o = document.getElementById('popup-overlay');
+  o.style.opacity = '0';
+  o.style.transition = 'opacity .3s';
+  setTimeout(() => o.style.display = 'none', 300);
+}
+
+function startTimer() {
+  setInterval(() => {
+    if (timerSeconds > 0) timerSeconds--;
+    const m = String(Math.floor(timerSeconds/60)).padStart(2,'0');
+    const s = String(timerSeconds%60).padStart(2,'0');
+    document.getElementById('timer').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeCompose(); closeMail(); }
 });
 document.getElementById('compose-modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('compose-modal')) closeCompose();
+  if (e.target.id === 'compose-modal') closeCompose();
 });
 document.getElementById('mail-view-modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('mail-view-modal')) closeMail();
+  if (e.target.id === 'mail-view-modal') closeMail();
 });
 
 init();
